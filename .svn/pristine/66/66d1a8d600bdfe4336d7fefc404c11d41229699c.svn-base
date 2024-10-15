@@ -1,0 +1,234 @@
+<script>
+
+</script>
+<main id="md" class="big_white_block">
+    <h3>儲值轉帳</h3>
+    <div id="md_point" class="mt_20">
+        <ul class="white_bottom_line tab_level_1">
+            <li><a href="#md_point_tab1">儲值購點</a></li>
+            <li><a href="#md_point_tab2">平台幣轉帳</a></li>
+        </ul>
+        <div id="md_point_tab1">
+            <div id="md_point_buy">
+                <ul>
+                    <li><a href="#md_point_buy1">線上購點</a></li>
+                    <li><a href="#md_point_buy2">序號儲值</a></li>
+                    <li><a href="#md_point_buy3">超值包月</a></li>
+                    <li><a href="#md_point_buy4">線上轉點</a></li>
+                    <!--                    <li><a href="#md_point_buy5">產包介紹</a></li>-->
+                </ul>
+                <div id="md_point_buy1" class="tab_level_2">
+
+                    <div id="md_mb_profile" class="tab_level_2">
+                        <form action="" method="POST" class="ml_20 mb_20">
+                            <div class="mb_10">
+                                <h4 label for="mbGameType">尚未開放：</label>
+                                    </form>
+                            </div>
+                    </div>
+
+                    <!--                    <h4 class="ml_20">請選擇您要購買的點數金額</h4>
+                                        <div class="fontSize_0">
+                                            <div class="inline_top width_32p">
+                                                <button type="button" class="buy_point_btn">NT. 50 = 平台幣 5,000</button>
+                                                <button type="button" class="buy_point_btn">NT. 100 = 平台幣 10,000</button>
+                                                <button type="button" class="buy_point_btn">NT. 300 = 平台幣 30,000</button>
+                                                <button type="button" class="buy_point_btn">NT. 500 = 平台幣 50,000</button>
+                                            </div>
+                                            <div class="inline_top width_32p">
+                                                <button type="button" class="buy_point_btn">NT. 1,000 = 平台幣 100,000</button>
+                                                <button type="button" class="buy_point_btn">NT. 2,000 = 平台幣 200,000</button>
+                                                <button type="button" class="buy_point_btn">NT. 5,000 = 平台幣 500,000</button>
+                                                <button type="button" class="buy_point_btn">NT. 10,000 = 平台幣 1,000,000</button>
+                                            </div>
+                                        </div>
+                    
+                                        <h4 class="ml_20 mt_20">使用滿額回饋劵</h4>
+                                        <form action="" method="POST" class="ml_20 mb_20">
+                                            <label for="md_point_buy1_select">請選擇滿額回饋券：</label>
+                                            <select name="md_point_buy1_select" id="md_point_buy1_select">
+                                                <option value="0">無可使用回饋券</option>
+                                                 <option value="1">回饋券一號</option>
+                                                <option value="2">回饋券二號</option> 
+                                            </select>
+                                             <input type="submit" value="使用此回饋券"> 
+                                        </form>-->
+                </div>
+                <div id="md_point_buy2" class="tab_level_2">
+                    <h4 class="ml_20">請選擇您的序號來源</h4>
+                    <div class="pink_btn colorbox">
+                        <span>JCard 序號儲值</span><span>何處買?</span><span>教學</span>
+                    </div>
+                    <h4 class="ml_20">以下尚未開放：</h4>
+                    <div class="blue_btn">
+                        <span>平台卡序號儲值</span><span>何處買?</span><span>教學</span>
+                    </div>
+                    <div class="blue_btn">
+                        <span>平台有錢活動/產包</span><span>何處買?</span><span>教學</span>
+                    </div>
+                    <div class="green_btn">
+                        <span>Fun Pay 全家立即儲</span><span>何處買?</span><span>教學</span>
+                    </div>
+                    <div class="light_blue_btn">
+                        <span>my Card 序號儲值</span><span>何處買?</span><span>教學</span>
+                    </div>
+                    <div class="red_btn">
+                        <span>GASH 序號儲值</span><span>何處買?</span><span>教學</span>
+                    </div>
+                    <div class="pink_btn">
+                        <span>辣椒卡 序號儲值</span><span>何處買?</span><span>教學</span>
+                    </div>
+                    <!--                <div class="pink_btn colorbox">
+                                        <span>JCard 序號儲值</span><span>何處買?</span><span>教學</span>
+                                    </div>-->
+                </div>
+                <div id="md_point_buy3" class="tab_level_2">
+                    <h4 class="ml_20">以下尚未開放：</h4>
+<!--                    <h4 class="ml_20">請選擇您的包月方案</h4>-->
+                    <div class="yellow_btn">500元</div>
+                    <div class="yellow_btn">2000元</div>
+                </div>
+                <div id="md_point_buy4" class="tab_level_2">
+                    <h4 class="ml_20">以下尚未開放：</h4>
+<!--                    <h4 class="ml_20">請選擇您要使用的轉點平台</h4>-->
+                    <div class="light_blue_btn">
+                        <span>my Card 線上轉點</span><span>何處買?</span><span>教學</span>
+                    </div>
+                </div>
+<!--                <div id="md_point_buy5" class="tab_level_2">
+                    <div id="md_mb_profile" class="tab_level_2">
+                        <form action="" method="POST" class="ml_20 mb_20">
+                            <div class="mb_10">
+                                <label for="mbGameType">尚未開放：</label>
+                        </form>
+                    </div>
+                </div>
+                <h4 class="ml_20">實體產包</h4>
+                <table>
+                    <tr>
+                        <th>馬戲團小丑包</th>
+                        <th>實體產包</th>
+                    </tr>
+                    <tr>
+                        <td>XXX</td>
+                        <td>XXX</td>
+                    </tr>
+                    <tr>
+                        <th>XX包</th>
+                        <th>實體產包</th>
+                    </tr>
+                    <tr>
+                        <td>XXX</td>
+                        <td>XXX</td>
+                    </tr>
+                    <tr>
+                        <th>XX包</th>
+                        <th>實體產包</th>
+                    </tr>
+                    <tr>
+                        <td>XXX</td>
+                        <td>XXX</td>
+                    </tr>
+                </table>
+                <h4 class="ml_20 mt_20">虛擬產包</h4>
+                <table>
+                    <tr>
+                        <th>馬戲團小丑包</th>
+                        <th>實體產包</th>
+                    </tr>
+                    <tr>
+                        <td>XXX</td>
+                        <td>XXX</td>
+                    </tr>
+                    <tr>
+                        <th>XX包</th>
+                        <th>實體產包</th>
+                    </tr>
+                    <tr>
+                        <td>XXX</td>
+                        <td>XXX</td>
+                    </tr>
+                    <tr>
+                        <th>XX包</th>
+                        <th>實體產包</th>
+                    </tr>
+                    <tr>
+                        <td>XXX</td>
+                        <td>XXX</td>
+                    </tr>
+                </table>
+            </div>-->
+        </div>
+    </div>
+    <!--        <div class="yellow_btn">500元</div>-->
+    <div id="md_point_tab2">
+        <div id="md_point_transfer">
+            <ul>
+                <li><a href="#md_point_transfer1">轉帳中心</a></li>
+                <li><a href="#md_point_transfer2">轉帳紀錄</a></li>
+            </ul>
+            <div id="md_point_transfer1" class="tab_level_2">
+                <h4 class="ml_20">平台幣轉帳</h4>
+                <div class="ml_20" style="line-height: 2em;">
+                    <p>轉出平台幣：<?= $viewData['transferData']['transfer_total'] ?></p>
+                    <p>目前可建立轉帳筆數：<?php echo $viewData['transferData']['daycount'] - $viewData['transferData']['transfer_count']
+?></p>
+                    <p>目前可轉帳額度：<?php
+                        echo $viewData['transferData']['daylimit'] - $viewData['transferData']['transfer_total']
+                        ?></p>
+                    <p>凍結轉帳點數：0</p>
+                </div>
+                <h4 class="ml_20 mt_20">轉帳入口</h4>
+                <div class="yellow_btn" id="transferData" style="width: 120px">前往轉帳</div>
+
+            </div>
+            <div id="md_point_transfer2" class="tab_level_2">
+                <h4 class="ml_20">轉帳紀錄</h4>
+                <table>
+                    <tr>
+                        <th>序號</th>
+                        <th>轉出暱稱</th>
+                        <th>轉出帳號</th>
+                        <th>轉入暱稱</th>
+                        <th>轉入帳號</th>
+                        <th>轉出點數</th>
+                        <th>減少點數</th>
+                        <th>手續費</th>
+                        <th>建立時間</th>
+                    </tr>
+
+                    <?php
+                    $record = $viewData['transferRecord'];
+                    if (count($record) > 1) {
+                        foreach ($record as $row) {
+                            ?>
+                            <tr>
+                                <td><?= $row['id'] ?></td>
+                                <td><?= $row['transfer_name'] ?></td>
+                                <td><?= $row['transfer_acc'] ?></td>
+                                <td><?= $row['receiver_name'] ?></td>
+                                <td><?= $row['receiver_acc'] ?></td>
+                                <td><?= $row['reduce_point'] ?></td>
+                                <td><?= $row['receive_point'] ?></td>
+                                <td><?= $row['fee'] ?></td>
+                                <td><?= $row['create_at'] ?></td>
+                            </tr>
+
+
+                            <?php
+                        }
+                    } else {
+                        ?>
+
+                        <tr>
+                            查無資料
+                        </tr>
+                    <?php }
+                    ?>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</main>

@@ -1,0 +1,17 @@
+function changePlayImg() {
+    $("header #hd_play").css("background-image", "url('img/Night_Play_2.png')");
+    setTimeout(function() {
+        $("header #hd_play").css("background-image", "url('img/Night_Play_1.png')");
+    }, 500);
+}
+
+setInterval("changePlayImg()", 1000);
+
+function changeFBImg() {
+    $("#fb_fan_page").css("background-image", "url('img/Night_FB_2.png')");
+    setTimeout(function() {
+        $("#fb_fan_page").css("background-image", "url('img/Night_FB_1.png')");
+    }, 500);
+}
+
+setInterval("changeFBImg()", 1000);

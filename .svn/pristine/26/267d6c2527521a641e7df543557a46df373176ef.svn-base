@@ -1,0 +1,145 @@
+<?php
+session_start();
+date_default_timezone_set("Asia/Taipei");
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+
+include_once("lib/config.php");
+include_once("lib/WebDB.php");
+include_once("lib/basePage.php");
+include_once("lib/Carbon.php");
+use Carbon\Carbon;
+
+$viewData = array();
+
+class func_game extends basePage
+{
+
+    public function page_load()
+    {
+
+        if (!isset($_SESSION['fuser_account'])) {
+            $this->redirect('index.php', '請先登入');
+            return;
+        }
+        //是否登入
+        //$this->isLogin();
+
+        //get 上有要特別處理的參數
+        $arrGetParam = array();
+        $arrGetParam['m'] = [
+            'getMarque',
+            'getJpotData',
+        ];
+
+        foreach ($arrGetParam as $k => $v) {
+            if (isset($_GET[$k])) {
+                if ($_GET[$k] == 'logout') {
+                    $this->logout();
+                }
+                if ($_GET[$k] == 'getMarque') {
+                    $this->getMarque();
+                }
+                if ($_GET[$k] == 'getJpotData') {
+                    $this->getJpotData();
+                }
+            }
+        }
+
+
+        global $viewData;
+        $viewData['member'] = $this->getMember();
+        // $viewData['marquee'] = $this->getMarque();
+        // $viewData['JpotData'] = $this->getJpotData();
+        setcookie('member_point', $viewData['member']['point']);
+        setcookie('member_account', $viewData['member']['account']);
+        setcookie('member_name', $viewData['member']['name']);
+
+        // var_dump($viewData);
+
+    }
+
+    public function getJpotData()
+    {
+        $sql = 'select * from jpot';
+        $JpotData = $this->_db->query($sql);
+        if (!$JpotData)
+            $JpotData = [
+                'id' => 0,
+                'accumulation' => '',
+            ];
+
+        foreach ($JpotData as $k => $j){
+                    $JpotData[$k]['accumulation'] = number_format($JpotData[$k]['accumulation']/100,2);
+                }
+
+        $result = [
+            'code' => 0,
+            'JpotData' => $JpotData
+        ];
+
+        $JpotData_encode = json_encode($JpotData);
+        
+        die($JpotData_encode);
+
+    }
+
+    public function getMarque()
+    {
+        $start = Carbon::now()->subMinutes(2)->toDateTimeString();
+        $buff = Carbon::now()->addMinutes(3)->toDateTimeString();
+
+        //$sql = "select * from broadcast where start_date <'" . $buff . "' and end_date >'" . $start . "' order by priority,created_at,end_date limit 10";
+        $sql = "select * from broadcast where start_date <='2017-01-18 18:41:06' and end_date >='2017-01-18 18:36:06' order by priority,created_at,end_date limit 10";
+        
+        $marquee = $this->_db->query($sql);
+        if (!$marquee)
+            $marquee = [
+                'id' => 0,
+                'title' => '',
+                'msg' => '歡迎光臨，老子有錢！',
+                'start_date' => '',
+                'end_date' => '',
+                'created_at' => '',
+                'priority' => 0,
+            ];
+
+        $result = [
+            'code' => 0,
+            'marquee' => $marquee
+        ];
+
+        $marqueeArray_encode = json_encode($marquee);
+
+        die($marqueeArray_encode);
+
+    }
+
+    public function getMember()
+    {
+
+        $account = $_SESSION['fuser_account'];
+        $member = $this->_db->single_check('select * from member where account= @account ', array('account' => $account));
+
+        //var_dump($account);
+        return $member;
+
+    }
+
+    public function logout()
+    {
+        if (isset($_SESSION["fuser_account"])) {
+            unset($_SESSION["fuser_account"]);
+        }
+        echo '<script>alert("已登出");window.location="index.php";</script>';
+
+    }
+
+
+}
+
+$aa = new func_game();
+$aa->page_load();
+
+
+?>

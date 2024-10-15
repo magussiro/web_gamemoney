@@ -1,0 +1,227 @@
+<?php
+require("inc/inc.php");
+require("func/func_slot_machine.php");
+require("head.php");
+//$db->debug();
+//ini_set("display_errors",1);
+//撈資料到表格中 and 分頁
+$id = ft($_GET['sm_id'],0);
+
+$arr_page['page_id'] = ft($_GET['pageID'],0);
+$res_sum = get_slot_machine($db, array());
+$arr_page['num'] = $res_sum['0']['cnt'];
+$page = new pager($arr_page);
+$res = get_slot_machine($db, $page);
+
+?>
+<!--畫面呈現-->
+    <div class="container-fluid">
+        <div class="row-fluid">
+			<!--列表-->
+            <?php 
+                require_once "left_menu.php"; 
+            ?>
+			
+            <div class="span10">
+				<!--標題列-->
+                <div class="span12">
+                    <h3>機台管理</h3>
+                </div>
+                    <div class="row-fluid">
+                        <div class="pull-left span10 text-left">
+                            <div class="btn-group">
+                                <a href="slot_machine.php?game=all"  class="btn"  title="全部"><b>全部</b></a>
+                                <a href="slot_machine.php?game=slot"  class="btn"  title="Slot"><b>Slot</b></a>
+                            </div>	
+                        </div>
+                    </div>
+				<!--新增按鈕-->
+                <?php
+                     if($admin['ad_mtid'] == 1)
+                     {
+                ?>
+                        <div class="row-fluid">
+                            <div class="pull-left span3 text-left">
+                                    <button class="btn btn-primary" onclick="dialog_set('slot_machine_add_mod.php?act=add','新增',600,450);">新增</button>
+                            </div>
+                        </div>
+                  <?php
+                     }
+                  ?>
+                    </br>
+				<!--資料內容-->
+                <div class="row-fluid">
+                    <table class="table table-hover table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th width="55">功能</th>
+                                <th width="55">編號</th>
+                                <th width="100">機率</th>
+                                <th width="200">最低單線押注金額</th>
+                                <th width="200">最高單線押注金額</th>
+                                <th width="200">最大持有金額</th>
+                                <th width="200">最小攜帶點數</th>
+                                <th width="200">最大攜帶點數</th>
+                                <th width="200">總拉霸次數</th>
+                                <th width="200">總拉霸金額</th>
+                                <th width="200">全盤中獎次數</th>
+                                <th width="200">全盤中獎金額</th>
+                                <th width="200">獎勵遊戲遊玩次數</th>
+                                <th width="200">獎勵遊戲中獎次數</th>                                                                
+                                <th width="200">總中獎金額</th>
+                                <th width="200">總押注金額</th>
+                                <th width="200">機台賠率</th>
+                                <th width="200">總差額</th>
+                                <th width="200">清空機台記錄</th> 
+                                <th width="200">查詢中獎記錄</th> 
+                                <th width="200">查詢拉霸記錄</th>                                                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if(count($res) > 0)
+                            {
+                                foreach($res as $key => $row)
+                                { 
+                                    //dump($row);
+                                        $bet = $row['total_bet'];
+                                        $win = $row['total_win'];
+                            ?>
+                            <tr>
+                                <td>
+                            <?php
+                                    if($admin['ad_mtid'] == 1)
+                                    {
+                            ?>
+                                        <!--功能:編輯/刪除觸發按鈕-->
+                                        <a class="alphm_obj" title="編輯" onmouseover="$(this).tooltip('show');" href="javascript:void(0);" onclick="dialog_set('slot_machine_add_mod.php?id=<?php echo $row['sm_id'];?>','修改',600,450);"><i class="icon-edit"></i></a>
+                            <?php
+                                    }
+                            ?>
+                                </td>
+								<!--將資料表內容引入-->
+                                <td>
+                                        <?php echo $row['sm_id'];?>
+                                </td>
+                                <td>
+                                        <?php echo $row['sm_prob'];?>
+                                </td>
+                                <td>
+                                        <?php echo $row['min_bet_per_line'];?>
+                                </td>
+                                <td>
+                                        <?php echo $row['max_bet_per_line'];?>
+                                </td>
+                                <td>
+                                        <?php echo $row['max_money'];?>
+                                </td>
+                                <td>
+                                        <?php echo $row['min_trans_money'];?>
+                                </td>
+                                <td>
+                                        <?php echo $row['max_trans_money'];?>
+                                </td>
+                                <td>
+                                        <?php echo $row['spin_count'];?><!--中獎次數-->
+                                </td>
+                                <td>
+                                        <?php echo $row['spin_win'];?><!--中獎金額-->
+                                </td> 
+                                 <td>
+                                        <?php echo $row['all_same_count'];?><!--全盤中獎次數-->
+                                </td> 
+                                 <td>
+                                        <?php echo $row['all_same_win']; ?><!--全盤中獎金額-->
+                                </td>
+                                 <td>
+                                        <?php echo $row['bonus_count']; ?><!--獎勵遊戲遊玩次數-->
+                                </td>
+                                 <td>
+                                        <?php echo $row['bonus_win']; ?><!--獎勵遊戲中獎次數-->
+                                </td>                                
+
+                                 <td>
+                                        <?php echo $win;?><!--總中獎金額-->
+                                </td>                                                                                           
+                                <td>
+                                        <?php echo $bet;?>
+                                </td>                                
+                                <td>
+                                       
+                                        <?php                                                                                   
+                                         $prob = $win * 100.0 / $bet;
+                                        if($row['sm_prob']<$prob){   
+                                            echo '<span style="color:#ff0000">'.sprintf("%1\$.2f", $prob).'%</span>';
+                                        }else{
+                                            echo '<span style="color:#000000">'.sprintf("%1\$.2f", $prob).'%</span>';
+                                        }
+                                        ?>
+                                        
+                                </td>
+                                <td>
+                                    <?php 
+                                        $offset = $bet - $win;
+                                        if($offset < 0){   
+                                            echo '<span style="color:#ff0000">'.$offset.'</span>';
+                                        }else{
+                                            echo '<span style="color:#000000">'.$offset.'</span>';
+                                        }
+                                    ?>
+                                </td>
+                                <?php
+                                    $total_win = $row['total_win'];
+                                    $all_same_win = $row['$all_same_win'];
+                                    $total_bet = $row['total_bet'];
+                                    $all_same_count = $row['all_same_count'];
+                                    $spin_count = $row['spin_count'];
+                                    $spin_win = $row['spin_win'];
+                                    $bonus_count = $row['bonus_count']; 
+                                    $bonus_win = $row['bonus_win']; 
+
+                                if($total_win || $all_same_win || $total_bet || $all_same_count || $spin_count || $spin_win || $bonus_count || $bonus_win ){
+                                ?>
+                                <td>
+                                    <input type="button" value="清空" onclick="if(confirm('確定要清空機台記錄嗎？')){location.href='slotmachine_del_act.php?id=<?php echo $row['sm_id']; ?>'}" class="btn"/>
+                                </td>
+                                <td><a class="alphm_obj" title="查詢" href="slot_machine_symbol.php?id=<?php echo $row['sm_id'];?>"> <i class="icon-search"></i></a></td>
+                                <td><a class="alphm_obj" title="查詢" href="slot_machine_select.php?id=<?php echo $row['sm_id'];?>"> <i class="icon-search"></i></a></td>
+                                <?php
+                                }else{
+                                 ?>   
+                                <td>
+                                    <input type="button" value="清空"  class="btn" disabled />                
+                                </td>
+                                <td><i class="icon-search"></i></td>
+                                <td><i class="icon-search"></i></td>
+                                <?php
+                                }
+                                ?>
+                            </tr>
+                            <?php 
+                                }
+                            }
+                            else 
+                            {
+                            ?>
+                            <tr>
+                                <td colspan="18">
+                                    <div class="row-fluid text-center">查無資料</div>
+                                </td>
+                            </tr>
+                            <?php 
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+                <?php echo $page->getPageFoot();?>
+            </div>
+        </div>
+    </div>
+    
+	<script Language="JavaScript">
+	</script>	
+
+<?php 
+require("foot.php");
+?>

@@ -1,0 +1,31 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Magus
+ * Date: 2017/3/3
+ * Time: 上午11:34
+ */
+global $pay2go_setting;
+//$pay2go_setting = [
+//    'MerchantID' => '316120815',
+//    'RespondType' => 'JSON',
+//    'Version' => '1.2',
+//    'LangType' => 'zh-tw',
+//    'TradeLimit' => '3600',
+//
+//    'HashKey' => 'SZiHER7CA7NTODXxA0y8gnwaApxzp8eh',
+//    'HashIV' => '8xZMo6oZecS2PQAq',
+//];
+//HashKey=aqvIG0kGFNqMADyXBzRT7L5H54P2ZkX9&Amt=49&MerchantID=31220036&MerchantOrderNo=1488797888&TimeStamp=1488797888&Version=1.2&HashIV=KsRrtb78ZxVAbtxM
+
+$pay2go_setting = [
+    'MerchantID' => '31220036',
+    'RespondType' => 'JSON',
+    'Version' => '1.2',
+    'LangType' => 'zh-tw',
+    'TradeLimit' => '3600',
+
+    'HashKey' => 'aqvIG0kGFNqMADyXBzRT7L5H54P2ZkX9',
+    'HashIV' => 'KsRrtb78ZxVAbtxM',
+];
+

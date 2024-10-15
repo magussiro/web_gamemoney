@@ -1,0 +1,204 @@
+<?php
+session_start();
+date_default_timezone_set("Asia/Taipei");
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+
+include_once("lib/config.php");
+include_once("lib/WebDB.php");
+include_once("lib/basePage.php");
+require 'lib/Carbon.php';
+use Carbon\Carbon;
+
+$viewData = array();
+
+class func_point extends basePage
+{
+
+    public function page_load()
+    {
+        //是否登入
+        $this->isLogin();
+
+        //get 上有要特別處理的參數
+        $arrGetParam = array();
+        $arrGetParam['m'] = 'getMemberList';
+
+        foreach ($arrGetParam as $k => $v) {
+            if (isset($_GET[$k])) {
+                if ($_GET[$k] == 'transferPoint' && $_POST) {
+                    $this->transferPoint();
+
+                }
+            }
+        }
+
+
+        global $viewData;
+        $viewData['member'] = $this->getUser();
+        $viewData['transferData'] = $this->gerTransferData($viewData['member']['id']);
+        $viewData['transferRecord'] = $this->getTransferRecord($viewData['member']['id']);
+
+
+    }
+    public function gerTransferData($user_id){
+        $today = Carbon::today()->toDateTimeString();
+        $torommow = Carbon::now()->endOfDay()->toDateTimeString();
+
+        $sql = "select COUNT(*) as cnt ,SUM(receive_point) as total from member_transfer_log 
+        where transfer_id=$user_id  and create_at between '$today' and '$torommow'";
+
+        $result = $this->_db->single($sql);
+
+        $sql = 'select * from game_tax where game_id = 1 ';
+
+        $result2 = $this->_db->single($sql);
+
+        $day_limit = $result2['daylimit'];
+        $tax = $result2['tax'];
+        $user_transfer_count = $result['cnt'];
+        $user_transfer_total = $result['total'];
+        $mapData = [];
+        $mapData['daylimit'] = $day_limit;
+        $mapData['daycount'] = $result2['daycount'];
+        $mapData['tax_percent'] = $tax;
+        $mapData['transfer_total'] = $user_transfer_total;
+        $mapData['transfer_count'] = $user_transfer_count;
+        return $mapData;
+
+
+    }
+
+    public function getTransferRecord($user_id){
+
+        $sql = "select b.name as transfer_name,b.account as transfer_acc,c.name as receiver_name,c.account as receiver_acc,a.* from member_transfer_log as a left outer join member as b on 
+a.transfer_id = b.id left outer join member as c on a.reciever_id = c.id WHERE a.transfer_id = $user_id order by a.create_at desc";
+
+        $result = $this->_db->query($sql);
+        return $result;
+
+
+    }
+
+
+    public function transferPoint()
+    {
+        $user = $this->getUser();
+
+        if (!$user) {
+            $this->alert('使用者不存在');
+        }
+        $reciever = $this->getAccount($_POST['account']);
+        if (!$reciever) {
+            $this->alert('此帳號不存在');
+        }
+//        $adb = new AdminDB();
+
+//        $fee =5;
+        $transferpoint = $_POST['point'];
+        $fee = $this->getFee($transferpoint);//去後台撈
+
+        if ($user['point'] + $fee < $transferpoint) {
+            $this->alert('點數不足');
+        }
+        $limit_arr = $this->getTransferDayLimit($user['id']);//檢查當日紀錄
+        $limit = $limit_arr['cnt'];
+        $limitTotal = $limit_arr['total'];
+        if ($limit >= 5 || (($limitTotal + $transferpoint )> 2000000)) {
+            $this->alert('已達今日上限');
+        }
+        $this->transferReal($user, $reciever, $transferpoint, $fee);
+
+
+    }
+
+    public function getFee($point)
+    {
+        $sql = 'select tax from game_tax where game_id = 1';
+        $fee = $this->_db->single($sql);
+        return (int)($point * ($fee['tax'] / 100));
+    }
+
+    public function getTransferDayLimit($transfer_id)
+    {
+        $today = Carbon::today()->toDateTimeString();
+        $torommow = Carbon::now()->endOfDay()->toDateTimeString();
+
+        $sql = "select COUNT(*) as cnt ,SUM(receive_point) as total from member_transfer_log 
+        where transfer_id=$transfer_id  and create_at between '$today' and '$torommow'";
+
+
+        $result = $this->_db->single($sql);
+        return $result;
+
+
+    }
+
+    public function transferReal($user, $reciever, $transferpoint, $fee)
+    {
+        $reduce = $transferpoint + $fee;
+
+        $user_id = $user['id'];
+        $reciever_id = $reciever['id'];
+        $sql = "update member set point = point - $reduce where id=$user_id and point>0";
+        $trigger = $this->_db->execSql($sql);
+        if (!$trigger) {
+            $this->alert('扣除點數失敗');
+        }
+        $sql = "update member set point = point + $transferpoint where id=$reciever_id";
+        $trigger = $this->_db->execSql($sql);
+        if (!$trigger) {
+            $this->alert('加點失敗');
+        }
+        $this->transferRecord($user, $reciever, $transferpoint, $fee);
+
+    }
+
+    public function transferRecord($user, $reciever, $transferpoint, $fee)
+    {
+        $mapData = [];
+        $mapData['transfer_id'] = $user['id'];
+        $mapData['reciever_id'] = $reciever['id'];
+        $mapData['fee'] = $fee;
+        $mapData['receive_point'] = $transferpoint;
+        $mapData['reduce_point'] = $transferpoint + $fee;
+        $mapData['create_at'] = date('Y-m-d H:i:s');
+
+
+        $trigger = $this->_db->Insert('member_transfer_log', $mapData);
+
+        if (!$trigger) {
+            $this->alert('轉移紀錄失敗');
+        }
+    }
+
+
+    public function getUser()
+    {
+        if (isset($_SESSION['fuser_account'])) {
+            $account = $_SESSION['fuser_account'];
+            $sql = 'select * from member where account = \'' . $account . '\'';
+            $member = $this->_db->single($sql);
+            return $member;
+        }
+
+        return false;
+
+    }
+
+    public function getAccount($account)
+    {
+
+        $sql = 'select * from member where account = \'' . $account . '\'';
+        $member = $this->_db->single($sql);
+        return $member;
+    }
+
+
+}
+
+$aa = new func_point();
+$aa->page_load();
+
+
+?>

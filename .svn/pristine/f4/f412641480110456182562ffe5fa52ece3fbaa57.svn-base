@@ -1,0 +1,33 @@
+<?php
+//取得資料內容
+
+function get_jpot_setting(DB $jpot_db)
+{
+    $sql = 'select a.accumulation , b.* from jpot as a LEFT outer join jpot_setting as b on a.id = b.jpot_id  ';
+    $res = $jpot_db->dbSelectPrepare($sql, []);
+    return $res;
+
+}
+
+function get_jpot_setting_once(DB $jpot_db, $id)
+{
+    $sql = 'select * from  jpot_setting where id = ?';
+    $sql_input = [];
+    $sql_input['id'] = $id;
+   $res = $jpot_db->dbSelectPrepare($sql, $sql_input);
+    return $res[0];
+
+}
+
+//
+//修改or更新
+function mod_jpot_setting(DB $jpot_db, $arr_input, $id)
+{
+    $sql = "UPDATE jpot_setting ";
+    $sql_where_condition = 'id = ? ';
+    $sql_where_value = array($id);
+    $result = $jpot_db->dbUpdatePrepare($sql, $arr_input, $sql_where_condition, $sql_where_value);
+    return $result;
+}
+
+?>

@@ -1,0 +1,17 @@
+<?php 
+        //從資料庫取跑馬燈
+        $marqueeArray = array(
+          "time" => "2017-01-30",
+          "content" => "歡迎光臨，老子有錢！"
+        );
+
+        //JSON encode
+        $marqueeArray_encode = json_encode($marqueeArray);
+        echo $marqueeArray_encode;
+
+        //JSON decode        
+        $marqueeArray2 = ''. $marqueeArray_encode .'';
+        $marqueeArray_decode = json_decode($marqueeArray2);
+
+?>
+

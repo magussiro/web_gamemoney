@@ -1,0 +1,21 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Magus
+ * Date: 2017/3/3
+ * Time: 上午11:34
+ */
+global $pay2go_setting;
+$pay2go_setting = [
+    'MerchantID' => '316120815',
+    'RespondType' => 'JSON',
+    'Version' => '1.2',
+    'LangType' => 'zh-tw',
+    'TradeLimit' => '3600',
+
+    'HashKey' => 'SZiHER7CA7NTODXxA0y8gnwaApxzp8eh',
+    'HashIV' => '8xZMo6oZecS2PQAq',
+];
+
+
+

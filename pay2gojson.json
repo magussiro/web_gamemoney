@@ -1,0 +1,5 @@
+{
+  "Status": "SUCCESS",
+  "Message": "\u4fe1\u7528\u5361\u6388\u6b0a\u6210\u529f",
+  "Result": "{\"MerchantID\":\"3430112\",\"Amt\":30,\"TradeNo\":\"14073109503001857\",\"MerchantOrderNo\":\"201407310950239561\",\"RespondType\":\"JSON\",\"CheckCode\":\"C3E6ED72D3641558DA5F701DEFB01B4A9636F1D100F06BEC06027BF5D8873733\",\"PaymentType\":\"CREDIT\",\"RespondCode\":\"54\",\"Auth\":\"\",\"Card6No\":\"457958\",\"Card4No\":\"5509\",\"ECI\":\"\",\"PayTime\":\"2014-07-31 09:50:38\"}"
+}

@@ -1,0 +1,49 @@
+M       php/func/func_main_left.php
+ M      php/func
+M       php/header.php
+ M      php
+M       func/func_index.php
+M       func/func_login.php
+ M      func
+M       lib/basePage.php
+ M      lib
+M       js/header.js
+ M      js
+M       css/game.css
+M       css/header.css
+ M      css
+M       game.php
+M       iframe/game_1.php
+A       iframe/game_2.php
+ M      iframe
+M       index.php
+M       login.php
+A       slotWeb/Release/.htaccess
+A       slotWeb/Release/Slot_WebGL.datagz
+A       slotWeb/Release/Slot_WebGL.jsgz
+A       slotWeb/Release/Slot_WebGL.memgz
+A       slotWeb/Release/UnityLoader.js
+A       slotWeb/Release
+A       slotWeb/StreamingAssets/Config.txt
+A       slotWeb/StreamingAssets/build_info.txt
+A       slotWeb/StreamingAssets/group.tgz
+A       slotWeb/StreamingAssets/init
+A       slotWeb/StreamingAssets/runslot
+A       slotWeb/StreamingAssets/runtest
+A       slotWeb/StreamingAssets/upslot
+A       slotWeb/StreamingAssets/uptest
+A       slotWeb/StreamingAssets
+A       slotWeb/TemplateData/UnityProgress.js
+A       slotWeb/TemplateData/favicon.ico
+A       slotWeb/TemplateData/fullbar.png
+A       slotWeb/TemplateData/fullscreen.png
+A       slotWeb/TemplateData/loadingbar.png
+A       slotWeb/TemplateData/logo.png
+A       slotWeb/TemplateData/progresslogo.png
+A       slotWeb/TemplateData/style.css
+A       slotWeb/TemplateData
+A       slotWeb/index.html
+A       slotWeb/index2.html
+A       slotWeb
+A       test
+ M      .

@@ -1,0 +1,140 @@
+<?php
+session_start(); 
+date_default_timezone_set("Asia/Taipei");
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+
+include_once("lib/config.php");
+include_once("lib/WebDB.php");
+include_once("lib/basePage.php");
+
+$viewData  = array();
+class func_member extends basePage
+{
+
+    public function page_load()
+    {
+        //判斷有沒有登入
+        if(! isset($_SESSION['fuser_account']))
+        {
+            $this->redirect('index.php','請先登入');
+            return;
+        }
+        
+
+        //get 上有要特別處理的參數
+        if( isset( $_GET['m']))
+        {
+            switch($_GET['m'])
+            {
+                case    'save_password':
+                        $this->savePassword();
+                        break;
+                case    'save_account':
+                        $this->saveAccount();
+                        break;
+            }
+        }
+
+
+        global $viewData ;
+    }
+
+
+    public function savePassword()
+    {
+        $account = $_SESSION['fuser_account'];
+        $newPass = $_POST['new_pass'];
+        $confirmPass = $_POST['comfirm_pass'];
+        $nickName = $_POST['nick_name'];
+
+        if($newPass =='')
+        {
+            $this->alert('請輸入新密碼');
+            return;
+        }
+
+        if($confirmPass =='')
+        {
+            $this->alert('請輸入確認密碼');
+            return;
+        }
+        if($newPass != $confirmPass)
+        {
+            $this->alert('密碼和確認密碼不同');
+            return;
+        }
+
+        $sql = 'select * from member where account= @account ';
+        $member = $this->_db->single_check($sql , array('account'=>$account));
+
+        $newPass = md5($this->encrypt($newPass));
+        $arrData = array();
+        $arrData['password'] = $newPass;
+        $arrData['name'] = $nickName;
+
+        $result = $this->_db->Update('member',array('account'=>$account),$arrData);
+
+        if(! $result )
+        {
+            $this->alert('更新失敗');
+            return;
+        }
+
+        $this->redirect('login.php?m=logout','修改成功，請使用新密碼登入');
+
+
+        //if($member['password'] )
+
+        //echo $account;
+
+        //var_dump($result);
+        //$this->alert($result[0]['name']);
+
+
+    }
+
+
+    public function saveAccount()
+    {
+        $arrData = array();
+        $arrData['name'] = $_POST['name'];
+        $arrData['birthday'] = $_POST['birthday'];
+        $arrData['tel'] = $_POST['tel'];
+        //$arrData['country'] = $_POST['country'];
+        //$arrData['phone'] = $_POST['phone'];
+        $arrData['email'] = $_POST['email'];
+        $arrData['address'] = $_POST['address'];
+        $arrData['invoice_type'] = $_POST['mdReceipt'];
+        $arrData['invoice_name'] = $_POST['invoice_name'];
+        $arrData['invoice_address'] = $_POST['invoice_address'];
+
+        $arrData['zip_code'] = $_POST['mbZipcode'];
+        $arrData['invoice_zip_code'] = $_POST['rcZipcode'];
+       
+        $account = $_SESSION['fuser_account'];
+
+        $result = $this->_db->Update('member',array('account'=>$account),$arrData);
+
+         if(! $result )
+        {
+            $this->alert('更新失敗');
+           
+        }
+        else
+        {
+             $this->redirect('member.php','更新成功');
+        }
+
+    }
+
+   
+}
+
+ $aa = new func_member();
+ $aa->page_load();
+
+
+
+
+?>

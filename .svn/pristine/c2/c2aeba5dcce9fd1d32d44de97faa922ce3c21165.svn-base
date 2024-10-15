@@ -1,0 +1,45 @@
+<?php
+include_once("lib/config.php");
+include_once '../lib/WebDB.php';
+include_once '../lib/basePage.php';
+include_once '../lib/resize-class.php';
+
+class game_log extends basePage {
+
+    function gam_log() {
+        session_start();
+        //var_dump($_FILES);
+        $file_tmp = $_FILES['img_upload']['tmp_name'];
+        $target_path = "/home/web/svnclient/gamemoney/upload/personal_avatar/";
+        $name = 'cg_' . (string) time();
+        $aa = move_uploaded_file($file_tmp, $target_path . $name);
+        $target_file = $target_path . $name;
+        $image = new ResizeImage();
+        $image->load($target_file);
+        $image->resizeToWidth(220);
+        $aa = pathinfo($target_file, PATHINFO_EXTENSION);
+        $target_files = explode("." . $aa, $target_file);
+        $image->save($target_files[0] . "s." . $aa);
+
+        $account = $_SESSION['fuser_account'];
+        //var_dump($GLOBALS);
+        //die;
+        $arrData['personal_avatar'] = $target_files[0] . "s." . $aa;
+        
+        //var_dump($account);
+        
+        //var_dump($this->_db);
+        $result = $this->_db->Update('member', array('account' => $account), $arrData);
+        
+        
+        //var_dump($result);
+        die;
+    }
+
+}
+
+$aa = new game_log();
+$aa->gam_log();
+?>
+
+

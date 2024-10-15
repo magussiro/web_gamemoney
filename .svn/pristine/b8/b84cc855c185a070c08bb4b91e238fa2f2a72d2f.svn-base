@@ -1,0 +1,206 @@
+<?php
+
+/**
+ * Created by PhpStorm.
+ * User: Magus
+ * Date: 2017/1/16
+ * Time: 下午3:32
+ */
+class JpotData
+{
+
+    protected $jpot_id;
+    protected $button_points;
+    protected $charge_points;
+    protected $acc_ratio;
+    protected $acc_limit;
+    protected $lottery_ratio;
+    protected $charge_ratio;
+    protected $accumulation;
+    protected $win_amount;
+
+
+    /**
+     * @return mixed
+     */
+    function initData($input_arr)
+    {
+        foreach ($input_arr as $key => $input)
+            if ($key != 'id')
+                $this->$key = $input;
+        $this->win_amount =0;
+
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWinAmount()
+    {
+        return $this->win_amount;
+    }
+
+    public function getJpotId()
+    {
+        return $this->jpot_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAccLimit()
+    {
+        return $this->acc_limit;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAccRatio()
+    {
+        return $this->acc_ratio;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getButtonPoints()
+    {
+        return $this->button_points;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChargePoints()
+    {
+        return $this->charge_points;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChargeRatio()
+    {
+        return $this->charge_ratio;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLotteryRatio()
+    {
+        return $this->lottery_ratio;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAccumulation()
+    {
+        return $this->accumulation;
+    }
+
+    function addAccumulation($acc_amount)
+    {
+        /**
+         * 將輸入spin積分轉換為累積積分 存入JpotData
+         *
+         *超過上限則以上限數值唯一
+         *
+         *每500累積0.4積分=>500000:400
+         *
+         * 回傳：增加積分 ？可能有錯
+         *
+         *
+         */
+
+        $limit = $this->getAccLimit();
+        $accumulation = $this->getAccumulation();
+
+        $point = $this->calculateAddAcc($acc_amount);
+
+        if ($accumulation + $point > $limit) {
+            $this->accumulation = $limit;
+            return $this->accumulation - $point < 0 ? 0 : $this->accumulation - $point;
+        }
+        $this->accumulation += $point;
+        return $point;
+
+    }
+
+    function calculateAddAcc($acc_amount)
+    {
+
+
+        return (int)($acc_amount / $this->getChargePoints()) * $this->getAccRatio();
+
+    }
+
+    function dealLuckyDraw($acc_amount)
+    {
+
+        /**
+         * 抽獎：
+         * 每 1500抽一次 中獎機率0.01
+         *1500000 ,10 ,總機率為100*100000 = 10000000
+         *
+         */
+        $lottery_num = $this->calculateLuckyNum($acc_amount);
+
+        if ($lottery_num <= 0)
+            return false;
+//        var_dump('lottery count', $lottery_num);
+        for ($i = 0; $i < $lottery_num; $i++) {
+            $win = $this->isLotteryWin();
+            if ($win) {
+                $this->win_amount = $this->accumulation;
+                $this->setBottonAcc();
+
+                return $win;
+            }
+        }
+
+        return 0;
+
+
+    }
+
+    function setBottonAcc()
+    {
+
+        $this->accumulation = $this->getButtonPoints();
+
+    }
+
+
+    function isLotteryWin()
+    {
+
+        $rate = $this->getLotteryRatio();
+        $tick = (rand(1, 10000000));
+//        var_dump('win_rate:'.$rate.',tick:'.$tick);
+        $win = $rate >= $tick;
+        return $win;
+
+    }
+
+
+    function calculateLuckyNum($acc_amount)
+    {
+
+        $lucky_count = (int)($acc_amount / $this->getChargeRatio());
+        return ($lucky_count);
+    }
+
+    function saveData($admin_db)
+    {
+        $sql = 'Update jpot';
+        $trigger = $admin_db->dbUpdatePrepare($sql, ['accumulation' => $this->getAccumulation()],
+            'id = ? ', ['id' => $this->getJpotId()]);
+        return $trigger;
+
+    }
+
+
+}
